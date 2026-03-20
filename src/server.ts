@@ -28,7 +28,8 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://n-b-hotel-website.vercel.app'
+    'https://n-b-hotel-website.vercel.app',
+    'https://n-b-hotel-website-com.vercel.app'
   ]
 }));
 app.use(express.json());
