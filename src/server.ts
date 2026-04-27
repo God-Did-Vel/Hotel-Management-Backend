@@ -30,7 +30,8 @@ app.use(cors({
     'http://localhost:3000',
     'https://n-b-hotel-website.vercel.app',
     'https://n-b-hotel-website-com.vercel.app',
-    'https://n-b-hotels-websites-com.vercel.app/'
+    'https://n-b-hotels-websites-com.vercel.app/',
+    'https://hotel-nb-website.vercel.app/'
   ]
 }));
 app.use(express.json());
