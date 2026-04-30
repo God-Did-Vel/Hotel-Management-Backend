@@ -31,7 +31,9 @@ app.use(cors({
     'https://n-b-hotel-website.vercel.app',
     'https://n-b-hotel-website-com.vercel.app',
     'https://n-b-hotels-websites-com.vercel.app/',
-    'https://hotel-nb-website.vercel.app/'
+    'https://hotel-nb-website.vercel.app/',
+    'https://n-b-hotel-web-app.vercel.app/',
+    'https://nb-hotel-websites.vercel.app/'
   ]
 }));
 app.use(express.json());
