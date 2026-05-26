@@ -5,10 +5,22 @@ const paymentMethodSchema = new mongoose.Schema({
         required: true,
         // e.g "Bank Transfer", "Bitcoin", "PayPal"
     },
+    bankName: {
+        type: String,
+        required: false,
+    },
+    accountNumber: {
+        type: String,
+        required: false,
+    },
+    accountName: {
+        type: String,
+        required: false,
+    },
     details: {
         type: String,
-        required: true,
-        // e.g "Account Number: 1234567890\nBank: Chase"
+        required: false,
+        default: '',
     },
     isActive: {
         type: Boolean,

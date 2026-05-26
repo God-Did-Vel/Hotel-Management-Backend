@@ -1,32 +1,21 @@
-import multer from 'multer';
-import path from 'path';
+import multer, { FileFilterCallback } from 'multer';
+import { Request } from 'express';
 
-const storage = multer.diskStorage({
-    destination(req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename(req, file, cb) {
-        cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
-    },
-});
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
-function checkFileType(file: any, cb: any) {
-    const filetypes = /jpg|jpeg|png|webp/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
+const storage = multer.memoryStorage();
 
-    if (extname && mimetype) {
-        return cb(null, true);
+const fileFilter = (
+    _req: Request,
+    file: Express.Multer.File,
+    cb: FileFilterCallback
+) => {
+    if (ALLOWED_TYPES.includes(file.mimetype)) {
+        cb(null, true);
     } else {
-        cb('Images only!');
+        cb(new Error('Only JPG, PNG and WebP images are allowed'));
     }
-}
+};
 
-const upload = multer({
-    storage,
-    fileFilter: function (req, file, cb) {
-        checkFileType(file, cb);
-    },
-});
-
-export default upload;
+export const upload = multer({ storage, fileFilter, limits: { fileSize: MAX_SIZE } });

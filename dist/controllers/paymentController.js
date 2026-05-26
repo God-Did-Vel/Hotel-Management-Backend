@@ -4,7 +4,14 @@ import Booking from '../models/Booking.js';
 // @route   GET /api/payments
 // @access  Private/Admin
 export const getPayments = async (req, res) => {
-    const payments = await Payment.find({}).populate('booking_id');
+    const payments = await Payment.find({})
+        .populate({
+        path: 'booking_id',
+        populate: {
+            path: 'user_id',
+            select: 'name email'
+        }
+    });
     res.json(payments);
 };
 // @desc    Update payment status

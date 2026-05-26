@@ -10,6 +10,8 @@ declare const Room: mongoose.Model<{
     amenities: string[];
     availability_status: boolean;
     featured: boolean;
+    location: "Benin" | "Ore";
+    room_type: "Room" | "Suite";
 } & mongoose.DefaultTimestampProps, {}, {}, {}, mongoose.Document<unknown, {}, {
     name: string;
     description: string;
@@ -21,6 +23,8 @@ declare const Room: mongoose.Model<{
     amenities: string[];
     availability_status: boolean;
     featured: boolean;
+    location: "Benin" | "Ore";
+    room_type: "Room" | "Suite";
 } & mongoose.DefaultTimestampProps, {}, {
     timestamps: true;
 }> & {
@@ -34,6 +38,8 @@ declare const Room: mongoose.Model<{
     amenities: string[];
     availability_status: boolean;
     featured: boolean;
+    location: "Benin" | "Ore";
+    room_type: "Room" | "Suite";
 } & mongoose.DefaultTimestampProps & {
     _id: mongoose.Types.ObjectId;
 } & {
@@ -51,6 +57,8 @@ declare const Room: mongoose.Model<{
     amenities: string[];
     availability_status: boolean;
     featured: boolean;
+    location: "Benin" | "Ore";
+    room_type: "Room" | "Suite";
 } & mongoose.DefaultTimestampProps, mongoose.Document<unknown, {}, mongoose.FlatRecord<{
     name: string;
     description: string;
@@ -62,6 +70,8 @@ declare const Room: mongoose.Model<{
     amenities: string[];
     availability_status: boolean;
     featured: boolean;
+    location: "Benin" | "Ore";
+    room_type: "Room" | "Suite";
 } & mongoose.DefaultTimestampProps>, {}, mongoose.MergeType<mongoose.DefaultSchemaOptions, {
     timestamps: true;
 }>> & mongoose.FlatRecord<{
@@ -75,6 +85,8 @@ declare const Room: mongoose.Model<{
     amenities: string[];
     availability_status: boolean;
     featured: boolean;
+    location: "Benin" | "Ore";
+    room_type: "Room" | "Suite";
 } & mongoose.DefaultTimestampProps> & {
     _id: mongoose.Types.ObjectId;
 } & {

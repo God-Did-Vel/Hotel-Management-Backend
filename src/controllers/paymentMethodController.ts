@@ -6,7 +6,8 @@ import PaymentMethod from '../models/PaymentMethod.js';
 // @access  Public
 export const getPaymentMethods = async (req: Request, res: Response): Promise<void> => {
     try {
-        const paymentMethods = await PaymentMethod.find({ isActive: true });
+        const filter = req.query.all === 'true' ? {} : { isActive: true };
+        const paymentMethods = await PaymentMethod.find(filter);
         res.json(paymentMethods);
     } catch (error) {
         console.error('Get payment methods error:', error);
@@ -21,19 +22,27 @@ export const getPaymentMethods = async (req: Request, res: Response): Promise<vo
 // @access  Private/Admin
 export const createPaymentMethod = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { provider, details, isActive } = req.body;
+        const { provider, bankName, accountNumber, accountName, details, isActive } = req.body;
 
         // Validation
-        if (!provider || !details) {
+        if (!provider) {
             res.status(400).json({
-                message: 'Please provide provider and details',
+                message: 'Please provide provider (payment method name)',
             });
             return;
         }
 
+        let finalDetails = details || '';
+        if (!finalDetails && bankName && accountNumber) {
+            finalDetails = `Bank Name: ${bankName}\nAccount Number: ${accountNumber}\nAccount Name: ${accountName || ''}`;
+        }
+
         const paymentMethod = await PaymentMethod.create({
             provider,
-            details,
+            bankName: bankName || '',
+            accountNumber: accountNumber || '',
+            accountName: accountName || '',
+            details: finalDetails,
             isActive: isActive !== false, // Default to true if not specified
         });
 
@@ -61,7 +70,15 @@ export const updatePaymentMethod = async (req: Request, res: Response): Promise<
         }
 
         paymentMethod.provider = req.body.provider || paymentMethod.provider;
-        paymentMethod.details = req.body.details || paymentMethod.details;
+        paymentMethod.bankName = req.body.bankName !== undefined ? req.body.bankName : paymentMethod.bankName;
+        paymentMethod.accountNumber = req.body.accountNumber !== undefined ? req.body.accountNumber : paymentMethod.accountNumber;
+        paymentMethod.accountName = req.body.accountName !== undefined ? req.body.accountName : paymentMethod.accountName;
+        
+        let finalDetails = req.body.details !== undefined ? req.body.details : paymentMethod.details;
+        if (!finalDetails && paymentMethod.bankName && paymentMethod.accountNumber) {
+            finalDetails = `Bank Name: ${paymentMethod.bankName}\nAccount Number: ${paymentMethod.accountNumber}\nAccount Name: ${paymentMethod.accountName || ''}`;
+        }
+        paymentMethod.details = finalDetails;
         paymentMethod.isActive = req.body.isActive !== undefined ? req.body.isActive : paymentMethod.isActive;
 
         const updatedPaymentMethod = await paymentMethod.save();
