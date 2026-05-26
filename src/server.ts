@@ -25,17 +25,21 @@ connectDB();
 
 const app = express();
 
-app.use(cors({
-  origin: [
+const allowedOrigins = [
     'http://localhost:3000',
     'https://n-b-hotel-website.vercel.app',
     'https://n-b-hotel-website-com.vercel.app',
-    'https://n-b-hotels-websites-com.vercel.app/',
-    'https://hotel-nb-website.vercel.app/',
-    'https://n-b-hotel-web-app.vercel.app/',
-    'https://nb-hotel-websites.vercel.app/'
-  ]
-}));
+    'https://n-b-hotels-websites-com.vercel.app',
+    'https://hotel-nb-website.vercel.app',
+    'https://n-b-hotel-web-app.vercel.app',
+    'https://nb-hotel-websites.vercel.app',
+];
+// Also allow the runtime FRONTEND_ORIGIN env var (set on Render dashboard)
+if (process.env.FRONTEND_ORIGIN) {
+    allowedOrigins.push(process.env.FRONTEND_ORIGIN.replace(/\/$/, ''));
+}
+app.use(cors({ origin: allowedOrigins, credentials: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Basic route

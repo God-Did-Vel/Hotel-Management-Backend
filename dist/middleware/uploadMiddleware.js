@@ -1,29 +1,16 @@
 import multer from 'multer';
-import path from 'path';
-const storage = multer.diskStorage({
-    destination(req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename(req, file, cb) {
-        cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
-    },
-});
-function checkFileType(file, cb) {
-    const filetypes = /jpg|jpeg|png|webp/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
-    if (extname && mimetype) {
-        return cb(null, true);
+
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+
+const storage = multer.memoryStorage();
+
+const fileFilter = (_req, file, cb) => {
+    if (ALLOWED_TYPES.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Only JPG, PNG and WebP images are allowed'));
     }
-    else {
-        cb('Images only!');
-    }
-}
-const upload = multer({
-    storage,
-    fileFilter: function (req, file, cb) {
-        checkFileType(file, cb);
-    },
-});
-export default upload;
-//# sourceMappingURL=uploadMiddleware.js.map
+};
+
+export const upload = multer({ storage, fileFilter, limits: { fileSize: MAX_SIZE } });
