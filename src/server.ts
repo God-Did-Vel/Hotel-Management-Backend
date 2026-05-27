@@ -33,6 +33,7 @@ const allowedOrigins = [
     'https://hotel-nb-website.vercel.app',
     'https://n-b-hotel-web-app.vercel.app',
     'https://nb-hotel-websites.vercel.app',
+    'https://nbitalianhotel.com'
 ];
 // Also allow the runtime FRONTEND_ORIGIN env var (set on Render dashboard)
 if (process.env.FRONTEND_ORIGIN) {
