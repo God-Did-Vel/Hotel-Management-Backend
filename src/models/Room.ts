@@ -36,6 +36,14 @@ const roomSchema = new mongoose.Schema(
                 type: String,
             },
         ],
+        image: {
+            type: String,
+        },
+        images: [
+            {
+                type: String,
+            },
+        ],
         availability_status: {
             type: Boolean,
             default: true,

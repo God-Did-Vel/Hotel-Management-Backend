@@ -27,19 +27,32 @@ const app = express();
 
 const allowedOrigins = [
     'http://localhost:3000',
-    'https://n-b-hotel-website.vercel.app',
-    'https://n-b-hotel-website-com.vercel.app',
-    'https://n-b-hotels-websites-com.vercel.app',
-    'https://hotel-nb-website.vercel.app',
-    'https://n-b-hotel-web-app.vercel.app',
-    'https://nb-hotel-websites.vercel.app',
-    'https://nbitalianhotel.com'
+    'http://localhost:5000',
+    "https://nbitalianhotel.com",
+    "https://www.nbitalianhotel.com"
 ];
-// Also allow the runtime FRONTEND_ORIGIN env var (set on Render dashboard)
+// Also allow the runtime FRONTEND_ORIGIN or FRONTEND_URL env var
 if (process.env.FRONTEND_ORIGIN) {
     allowedOrigins.push(process.env.FRONTEND_ORIGIN.replace(/\/$/, ''));
 }
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL.replace(/\/$/, ''));
+}
+
+app.use(cors({ 
+    origin: function (origin, callback) {
+        // Allow requests with no origin (e.g. mobile apps, curl) or if origin is explicitly allowed
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        // Allow any Vercel domain dynamically
+        if (origin && origin.endsWith('.vercel.app')) {
+            return callback(null, true);
+        }
+        callback(new Error('Not allowed by CORS'));
+    }, 
+    credentials: true 
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
